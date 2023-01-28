@@ -32,9 +32,7 @@ app.post("/", async (req, res) => {
       prompt: `${prompt}`,
       temperature: 0,
       max_tokens: 3900,
-      frequency_penalty: 0,
-      presence_penalty: 0,
-      top_p: 0.1,
+      top_p: 0,
       stop: ["\n"],
     });
     res.status(200).json(response.data.choices[0].text);
