@@ -2,7 +2,13 @@ const express = require("express");
 const cors = require("cors");
 require("dotenv").config();
 
-// OPENAI CONFIGURATION
+const app = express();
+const PORT = process.env.PORT || 5000;
+
+app.use(cors());
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+
 const { Configuration, OpenAIApi } = require("openai");
 const configuration = new Configuration({
   apiKey: process.env.OPENAI_API_KEY,
@@ -10,16 +16,6 @@ const configuration = new Configuration({
 
 const openai = new OpenAIApi(configuration);
 
-// INIT APP
-const app = express();
-const PORT = process.env.PORT || 5000;
-
-// MIDDLEWARES
-app.use(cors());
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-
-// POST REQUEST TO OPENAI
 app.post("/", async (req, res) => {
   const prompt = req.body.prompt;
   if (!prompt) {
@@ -31,9 +27,8 @@ app.post("/", async (req, res) => {
       model: "text-davinci-003",
       prompt: `${prompt}`,
       temperature: 0,
-      max_tokens: 3900,
+      max_tokens: 4000,
       top_p: 0,
-      stop: ["\n"],
     });
     res.status(200).json(response.data.choices[0].text);
   } catch (error) {
